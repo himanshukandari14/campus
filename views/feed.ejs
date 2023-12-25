@@ -1,0 +1,105 @@
+<% include ./partials/header.ejs %>
+  <div class="w-full min-h-screen bg-zinc-900 text-white py-5">
+    <div class="w-full px-4 flex items-center justify-between">
+      <img class="h-10" src="/images/logocampusbook.png" alt="">
+      <div class="icons -mt-2 flex gap-5 items-center">
+        <a href="/notification"><i class="text-[1.4rem] ri-heart-3-line"></i></a>
+       <a href="/chat">
+        <i class="text-[1.4rem] ri-messenger-line"></i>
+        </a> 
+      </div>
+    </div>
+    <div id="mystory" class="story px-3 flex gap-3 overflow-auto mt-5">
+      <!-- hidden form -->
+      <form hidden action="/story" method="post" enctype="multipart/form-data">
+        <input id="inputstory" name="file" type="file">
+        <input id="storysubmitbtn" type="submit" value="">
+      </form>
+     
+     <div id="addstorybtn" class="circle flex-shrink-0 relative">
+    <div class="gradient w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r from-blue-800 to-blue-200 flex items-center justify-center ">
+        <div class="inner w-[92%] h-[92%] flex rounded-full overflow-hidden relative">
+            <img class="w-full h-full object-cover absolute z-10" src="/images/uploads/<%= user.profileImage %>" alt="">
+            <h1 class=" bg-red-600 rounded-md px-1 absolute z-20 text-[11px] bottom-2 right-1">Add story</h1>
+        </div>
+    </div>
+</div>
+
+
+       <% story.reverse().forEach(function(storyelem){ %>
+       <a href="/story/user/<%=storyelem._id  %>">
+         <div id="" class="circle flex-shrink-0">
+        <div
+          class="gradient w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r  from-blue-800 to-blue-200 flex items-center justify-center">
+          <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+            <img class="w-full h-full object-cover"
+              src="/images/uploads/<%= storyelem.user.profileImage %>"
+              alt="">
+          </div>
+        </div>
+      </div>
+       </a>
+      <% }) %>
+      
+      
+      
+      
+    </div>
+    <div class="posts mb-20">
+     <%posts.reverse().forEach(function(elem){%>
+         <div class="post mt-10 w-full min-h-[50vh]">
+        <div class="title px-4 flex items-center gap-2">
+          <div class="w-[8vw] h-[8vw] bg-sky-100 rounded-full overflow-hidden">
+            <a href="/profile/user/<%=elem.user._id %>"><img class="object-cover" src="/images/uploads/<%=elem.user.profileImage %>" alt="">
+          </div>
+          <h4 class="text-sm"><%=elem.user.username %></h4>
+          </a>
+        <h6 class="text-xs opacity-30"><%= elem.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></h6>
+
+           <a href="/delete/post/<%= elem._id %>" class="delete-post-btn">
+            <% if(elem.user.id == user._id){ %>
+              <i class="ri-delete-bin-line"></i>
+            <% } %>
+      
+    </a>
+        </div>
+        <div class="w-full h-96 md:h-[600px] mt-4 bg-sky-100 overflow-hidden ">
+            <img class="h-full md:min-h-full w-full object-cover" src="/images/uploads/<%= elem.picture %>" alt="">
+        </div>
+        <div class="options w-full px-4 flex justify-between items-center text-[1.4rem]">
+          <div class="flex gap-3 mt-2">
+            
+            <a href="/like/post/<%= elem._id %>">
+              <% if(elem.likes.indexOf(user._id) !== -1){ %>
+  <i class="ri-heart-3-fill text-red-600"></i>
+<% } else { %>
+  <i class="ri-heart-3-line"></i>
+<% } %>
+
+             </a>
+            <i class="ri-chat-3-line"></i>
+            <i class="ri-share-circle-line"></i>
+           
+          </div>
+          <i class="ri-bookmark-line"></i>
+        </div>
+        <h3 class="px-4 mt-2 text-sm leading-none tracking-tight"><%=elem.likes.length %> likes</h3>
+        <h2 class="text-white font-light text-sm mt-2"><span class="font-semibold pl-4 pr-2"><%=elem.user.username %></span><%=elem.caption %></h2>
+      </div>
+
+     <%}) %>
+    </div>
+  </div>
+  <script>
+    const inputstory=document.querySelector('#inputstory');
+    const storysubmitbtn=document.querySelector('#storysubmitbtn');
+    const addstorybtn= document.querySelector('#addstorybtn');
+    addstorybtn.addEventListener('click',()=>{
+      inputstory.click();
+    });
+    inputstory.addEventListener("change",()=>{
+      storysubmitbtn.click();
+    })
+
+  </script>
+  <% include ./partials/footer.ejs %>

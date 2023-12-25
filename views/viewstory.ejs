@@ -1,0 +1,23 @@
+<% include ./partials/header.ejs %>
+<div class="bg-[#18181B] w-[100vw] h-[100vh] text-white flex justify-center items-center py-6">
+    <!-- main story -->
+    <div class="bg-[#c8c6c6] h-full w-[90%] flex flex-col justify-center items-center">
+       <div>
+         <img src="/images/uploads/<%=story.media %>" alt="">
+        
+       </div>
+      <div class="w-full"> <h3 class="text-left" id="storyCreatedAt"></h3></div>
+    </div>
+</div>
+<% include ./partials/footer.ejs %>
+
+<!-- Load moment.js before your script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script>
+    // Set the formatted time using moment.js when the DOM is ready
+    document.addEventListener('DOMContentLoaded', function () {
+        var storyCreatedAt = document.getElementById('storyCreatedAt');
+        var formattedTime = moment('<%= story.createdAt %>').fromNow();
+        storyCreatedAt.textContent = formattedTime;
+    });
+</script>
