@@ -12,9 +12,9 @@
             "dest": "app.js"
         }
     ],
-    "function":{
+    "functions": {
         "/login": {
-        "maxDuration": 20
+            "maxDuration": 20
+        }
     }
-}
 }
