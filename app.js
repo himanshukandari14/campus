@@ -8,22 +8,13 @@ var logger = require('morgan');
 const expressSession = require('express-session');
 const passport = require('passport');
 const flash = require('connect-flash');
-const mongoose = require('mongoose'); // Add this line for MongoDB
 
 require('dotenv').config();
 
-// Update MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((error) => {
-    console.error('MongoDB connection error:', error);
-  });
+process.env.MONGODB_URI = "mongodb://127.0.0.1:27017/instclone";
+process.env.SESSION_SECRET = "secret key";
 
+const mongoose = require('mongoose'); 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
