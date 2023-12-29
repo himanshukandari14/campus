@@ -1,6 +1,5 @@
 var createError = require('http-errors');
 var express = require('express');
-// socket
 const http = require('http');
 var path = require('path');
 const chatModule = require('./routes/socket');
@@ -9,27 +8,38 @@ var logger = require('morgan');
 const expressSession = require('express-session');
 const passport = require('passport');
 const flash = require('connect-flash');
+const mongoose = require('mongoose'); // Add this line for MongoDB
 
 require('dotenv').config();
+
+// Update MongoDB connection
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((error) => {
+    console.error('MongoDB connection error:', error);
+  });
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
-// Use the flash middleware
 app.use(flash());
 
-var server = http.createServer(app); // Create an HTTP server for Socket.io
-var io = chatModule(server); // Pass the server to the chat module
+var server = http.createServer(app);
+var io = chatModule(server);
 
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(expressSession({
   resave: false,
   saveUninitialized: false,
-  secret: 'secret key',
+  secret: process.env.SESSION_SECRET || 'secret key',
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -45,18 +55,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-// catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
 
-// error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });

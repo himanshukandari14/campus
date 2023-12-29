@@ -1,6 +1,10 @@
 const mongoose= require('mongoose');
 const plm=require('passport-local-mongoose')
-mongoose.connect("mongodb://127.0.0.1:27017/instclone");
+// mongoose.connect("mongodb://127.0.0.1:27017/instclone");
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const userSchema= mongoose.Schema({
   username:{
