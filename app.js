@@ -1,4 +1,4 @@
-
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 // socket
@@ -15,6 +15,12 @@ const flash = require('connect-flash');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+
+
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/instclone', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 var app = express();
 // Use the flash middleware
