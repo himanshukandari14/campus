@@ -11,5 +11,10 @@
             "src": "/(.*)",
             "dest": "app.js"
         }
-    ]
+    ],
+    "function":{
+        "/login": {
+        "maxDuration": 20
+    }
+}
 }
